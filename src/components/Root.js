@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useActions } from 'easy-peasy';
+import { useActions, useStore } from 'easy-peasy';
 import Question from './Question';
 import Input from './Input';
 
@@ -7,10 +7,16 @@ const Root = () => {
   const initialise = useActions(actions => actions.initialise)
   useEffect(() => {
     initialise()
-  });
+  }, []);
+
+  const currentIndex = useStore(state => state.questions.ids);
+  const askedIds = useStore(state => state.questions.askedIds);
+
   return (
     <div>
-      <Question />
+      {askedIds.map(id => (
+        <Question id={id} />
+      ))}
       <Input />
     </div>
   );

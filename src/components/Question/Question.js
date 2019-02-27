@@ -6,9 +6,10 @@ const questionComponents = {
   radio: RadioQuestion
 };
 
-const Question = () => {
-  const question = useStore(state => state.questions.currentQuestion);
-  const next = useActions(state => state.questions.next);
+const Question = (props) => {
+  const { id } = props;
+  const question = useStore(state => state.questions.getById(id));
+  const answerQuestion = useActions(state => state.questions.answerQuestion);
 
   if (!question) return null;
   const Component = questionComponents[question.type];
@@ -16,8 +17,10 @@ const Question = () => {
 
   return (
     <div>
-      <button onClick={next}>Next</button>
-      <Component question={question} />
+      <Component
+        answerQuestion={answerQuestion}
+        question={question}
+      />
     </div>
   )
 };

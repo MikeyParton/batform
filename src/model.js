@@ -22,7 +22,30 @@ const model = {
       if (!id) return null;
       return byId[id];
     }),
+    getById: select(state =>
+      id => state.byId[id]
+    ),
+    askedIds: select(state => {
+      // The list of questions that have been asked (based on currentIndex)
+      // If the questions were not linear, each answer would be responsible
+      // for pushing the next question id to this array
+      const { ids, currentIndex } = state;
+      return ids.slice(0, currentIndex + 1)
+    }),
     // Actions
+    answerQuestion: (state, payload) => {
+      const question = state.byId[payload.id];
+
+      state.byId = {
+        ...state.byId,
+        [payload.id]: {
+          ...question,
+          userAnswer: payload.answer
+        }
+      };
+
+      state.currentIndex++;
+    },
     next: (state, payload) => {
       state.currentIndex++;
     },
