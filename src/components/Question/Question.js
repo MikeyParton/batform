@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore, useActions } from 'easy-peasy';
 import RadioQuestion from './RadioQuestion';
 
@@ -10,10 +10,26 @@ const Question = (props) => {
   const { id } = props;
   const question = useStore(state => state.questions.getById(id));
   const answerQuestion = useActions(state => state.questions.answerQuestion);
+  const [typing, setTyping] = useState(true);
 
-  if (!question) return null;
+  // Show question after typing for a few seconds
+  useEffect(() => {
+    setTimeout(() => {
+      setTyping(false);
+    }, 2000);
+  }, []);
+
   const Component = questionComponents[question.type];
   if (!Component) return null;
+
+  // Typing indicator between questions
+  if (typing) {
+    return (
+      <div>
+        Oneflare is typing ....
+      </div>
+    )
+  }
 
   return (
     <div>
