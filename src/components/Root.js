@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useActions } from 'easy-peasy';
 import Question from './Question';
+import Input from './Input';
 
 const Root = () => {
   const initialise = useActions(actions => actions.initialise)
@@ -10,6 +11,7 @@ const Root = () => {
   return (
     <div>
       <Question />
+      <Input />
     </div>
   );
 };
