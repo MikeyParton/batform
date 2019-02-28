@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useActions, useStore } from 'easy-peasy';
 import Question from './Question';
 import Input from './Input';
@@ -30,19 +30,13 @@ const Root = () => {
   }, []);
 
   const askedIds = useStore(state => state.questions.askedIds);
-  const scrollWindowRef = useRef();
-
-  useEffect(() => {
-    console.log('running');
-    scrollWindowRef && scrollWindowRef.current.scrollTo(0, scrollWindowRef.current.scrollHeight)
-  });
 
   return (
     <Page>
       <Header>
         Oneflare
       </Header>
-      <MessageWindow ref={scrollWindowRef}>
+      <MessageWindow>
         {askedIds.map(id => (
           <Question id={id} />
         ))}

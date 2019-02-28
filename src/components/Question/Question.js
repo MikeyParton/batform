@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useStore, useActions } from 'easy-peasy';
 import RadioQuestion from './RadioQuestion';
 import CheckboxQuestion from './CheckboxQuestion';
@@ -26,20 +26,27 @@ const Question = (props) => {
     }, 2000);
   }, []);
 
+  const questionRef = useRef();
+  // Scroll the question into view when it appears
+  useEffect(() => {
+    if (!questionRef.current) return;
+    questionRef.current.scrollIntoView({ behavior: 'smooth' });
+  });
+
   const Component = questionComponents[question.type];
   if (!Component) return null;
 
   // Typing indicator between questions
   if (typing) {
     return (
-      <div>
+      <div ref={questionRef}>
         Oneflare is typing ....
       </div>
     )
   }
 
   return (
-    <div>
+    <div ref={questionRef}>
       <Component
         answerQuestion={answerQuestion}
         question={question}
