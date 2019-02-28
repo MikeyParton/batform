@@ -22,6 +22,7 @@ const Question = (props) => {
       <OptionsWrapper>
         {question.answers.map((answer, index) => (
           <Option
+            index={index}
             active={question.userAnswer && question.userAnswer.includes(index)}
             onClick={() => handleAnswer(index)}
           >

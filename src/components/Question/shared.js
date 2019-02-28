@@ -1,8 +1,20 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { darken, lighten } from 'polished';
 
 const botMessageColor = '#D8D8D8';
 const userMessageColor = '#263133';
+
+export const fadeIn = (delay) => css`
+  animation: fadeIn 0.5s ${delay && `${delay}s `}linear;
+  animation-fill-mode: forwards;
+  opacity: 0;
+  transform: translateY(10px);
+
+  @keyframes fadeIn {
+    0%   {opacity: 0; transform: translateY(10px);}
+    100% {opacity: 1; transform: translateY(0px);}
+  }
+`;
 
 export const MessageWrapper = styled.div`
   background-color: ${botMessageColor};
@@ -14,6 +26,8 @@ export const MessageWrapper = styled.div`
     background-color: ${userMessageColor};
     color: white;
   `}
+
+  ${fadeIn()}
 `;
 
 export const OptionsWrapper = styled.ul`
@@ -49,4 +63,6 @@ export const Option = styled.li`
     background-color: ${userMessageColor};
     color: white;
   `}
+
+  ${(props) => fadeIn((props.index + 1) * 0.25)}
 `;

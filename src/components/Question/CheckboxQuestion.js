@@ -46,6 +46,7 @@ const Question = (props) => {
       <OptionsWrapper>
         {question.answers.map((answer, index) => (
           <Option
+            index={index}
             active={selectedValues.includes(index)}
             onClick={() => toggleAnswer(index)}
           >
@@ -54,6 +55,7 @@ const Question = (props) => {
         ))}
         {showSubmit && (
           <Option
+            index={0}
             submit
             onClick={handleAnswer}
           >
