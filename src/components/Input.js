@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import Speak from './Speak';
+import styled from 'styled-components';
+
+const InputWrapper = styled.div`
+  border-top: 1px solid grey;
+  flex-shrink: 0;
+`;
 
 const Input = (props) => {
   const [speakActive, setSpeakActive] = useState(false);
@@ -14,7 +20,7 @@ const Input = (props) => {
   }
 
   return (
-    <div>
+    <InputWrapper>
       <textarea onChange={handleChange} value={value} />
       <button
         onMouseDown={() => setSpeakActive(true)}
@@ -26,7 +32,7 @@ const Input = (props) => {
         active={speakActive}
         onResult={onSpeakResult}
       />
-    </div>
+    </InputWrapper>
   )
 }
 
