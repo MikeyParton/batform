@@ -6,7 +6,26 @@ import CheckboxQuestion from './CheckboxQuestion';
 import SimpleQuestion from './SimpleQuestion';
 import Message from './Message';
 
-const QuestionWrapper = styled.div`white-space: pre-line;`
+const Row = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+
+  ${props => props.user && `
+    justify-content: flex-end;
+  `}
+`;
+
+export const MessageWrapper = styled.div`
+  background-color: #D8D8D8;
+  border-radius: 4px;
+  padding: 20px;
+  white-space: pre-line;
+
+  ${props => props.user && `
+    background-color: #263133;
+    color: white;
+  `}
+`
 
 const questionComponents = {
   radio: RadioQuestion,
@@ -39,22 +58,28 @@ const Question = (props) => {
   const Component = questionComponents[question.type];
   if (!Component) return null;
 
-  // Typing indicator between questions
-  if (typing) {
-    return (
-      <div ref={questionRef}>
-        Oneflare is typing ....
-      </div>
-    )
-  }
-
   return (
-    <QuestionWrapper ref={questionRef}>
-      <Component
-        answerQuestion={answerQuestion}
-        question={question}
-      />
-    </QuestionWrapper>
+    <>
+      <Row ref={questionRef}>
+        {typing ? (
+          <MessageWrapper typing>
+            ...
+          </MessageWrapper>
+        ) : (
+          <Component
+            answerQuestion={answerQuestion}
+            question={question}
+          />
+        )}
+      </Row>
+      {question.userAnswer && (
+        <Row user>
+          <MessageWrapper user>
+            {question.friendlyAnswer}
+          </MessageWrapper>
+        </Row>
+      )}
+    </>
   )
 };
 

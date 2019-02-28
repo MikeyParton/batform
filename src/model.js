@@ -36,11 +36,20 @@ const model = {
     answerQuestion: (state, payload) => {
       const question = state.byId[payload.id];
 
+      let friendlyAnswer = payload.answer;
+      if (Array.isArray(payload.answer)) {
+        friendlyAnswer = payload
+          .answer
+          .map((index) => question.answers[index].label)
+          .join(', ');
+      }
+
       state.byId = {
         ...state.byId,
         [payload.id]: {
           ...question,
-          userAnswer: payload.answer
+          userAnswer: payload.answer,
+          friendlyAnswer: friendlyAnswer
         }
       };
 

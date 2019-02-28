@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { MessageWrapper } from './Question';
 
 const Question = (props) => {
   const { question, answerQuestion } = props;
@@ -11,9 +12,9 @@ const Question = (props) => {
   }, []);
 
   return (
-    <div>
-      <div>{question.question}</div>
-    </div>
+    <MessageWrapper>
+      {question.question}
+    </MessageWrapper>
   )
 };
 

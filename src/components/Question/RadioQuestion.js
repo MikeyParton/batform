@@ -1,4 +1,5 @@
 import React from 'react';
+import { MessageWrapper } from './Question';
 
 const Question = (props) => {
   const { question, answerQuestion } = props;
@@ -10,7 +11,9 @@ const Question = (props) => {
 
   return (
     <div>
-      <div>{question.question}</div>
+      <MessageWrapper>
+        {question.question}
+      </MessageWrapper>
       <ul>
         {question.answers.map((answer, index) => (
           <li onClick={() => handleAnswer(index)}>
