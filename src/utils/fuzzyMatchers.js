@@ -8,6 +8,8 @@ export const indexOfFuzzyWordMatch = (value, options) => {
 
   // If we don't have the one result, bail out
   if (!results || !results.length === 1) return -1;
+  // If we have a low quality result, bail out
+  if (results[0][0] < 0.5) return -1;
 
   return options.findIndex((option, index) => {
     return option === results[0][1];
