@@ -10,8 +10,8 @@ const questions = [
     question: 'Is this a residential or commercial plumbing job?',
     type: 'radio',
     answers: [
-      { answer: 'Residential' },
-      { answer: 'Commercial' }
+      { label: 'Residential' },
+      { label: 'Commercial' }
     ]
   },
   {
@@ -19,9 +19,9 @@ const questions = [
     question: 'Which service do you need?',
     type: 'radio',
     answers: [
-      { answer: 'Installation' },
-      { answer: 'Replacement' },
-      { answer: 'Repair and Maintenance' }
+      { label: 'Installation' },
+      { label: 'Replacement' },
+      { label: 'Repair and Maintenance' }
     ]
   },
   {
@@ -29,10 +29,10 @@ const questions = [
     question: 'What do you need repaired or maintained?',
     type: 'radio',
     answers: [
-      { answer: 'Pipelines' },
-      { answer: 'Gasline' },
-      { answer: 'Shower or bathtub' },
-      { answer: 'Toilet' }
+      { label: 'Pipelines' },
+      { label: 'Gasline' },
+      { label: 'Shower or bathtub' },
+      { label: 'Toilet' }
     ]
   },
   {
@@ -40,10 +40,10 @@ const questions = [
     question: 'What shower or bathtub problems do you have?',
     type: 'checkbox',
     answers: [
-      { answer: 'Clogged drain' },
-      { answer: 'Slow drain' },
-      { answer: 'Shower or bathtub' },
-      { answer: 'Toilet' }
+      { label: 'Clogged drain' },
+      { label: 'Slow drain' },
+      { label: 'Shower or bathtub' },
+      { label: 'Toilet' }
     ]
   }
 ];
