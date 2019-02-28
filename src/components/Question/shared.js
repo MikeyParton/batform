@@ -35,6 +35,7 @@ export const OptionsWrapper = styled.ul`
   flex-direction: column;
   list-style: none;
   padding-left: 0;
+  margin-bottom: 0;
 `;
 
 export const Option = styled.li`

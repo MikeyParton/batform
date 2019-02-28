@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore, useActions } from 'easy-peasy';
 import AutoTextarea from 'react-textarea-autosize';
 import { isMobile } from 'react-device-detect';
+import styled from 'styled-components';
+import {
+  indexOfnumberMatch,
+  indexOfFuzzyNumberMatch,
+  indexOfFuzzyWordMatch
+} from 'utils/fuzzyMatchers';
+import { usePrevious } from 'utils/hooks';
 import { Microphone, Send } from 'icons';
 import Speak from './Speak';
-import styled from 'styled-components';
+
+const autoSubmitSpeakTypes = ['radio', 'checkbox'];
 
 const InputWrapper = styled.div`
   border-top: 1px solid grey;
@@ -31,21 +39,37 @@ const Input = (props) => {
   const [value, setValue] = useState('');
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const currentQuestion = useStore(state => state.questions.currentQuestion);
+  const autoSubmitSpeak = currentQuestion && autoSubmitSpeakTypes.includes(currentQuestion.type);
+  const prevState = usePrevious({ speakActive });
+
+  useEffect(() => {
+    if(!speakActive && prevState.speakActive !== speakActive) {
+      console.log('should be doing something here');
+    }
+  }, [speakActive])
 
   const handleSimpleSend = () => {
     answerQuestion({ id: currentQuestion.id, answer: value })
   }
 
   const handleRadioSend = () => {
-    const index = currentQuestion.answers.findIndex((element, index) => {
-      return element.label.toLowerCase() === value.toLowerCase() || value === (index + 1).toString()
-    });
+    const answers = currentQuestion.answers.map(answer => answer.label);
+    let index;
+
+    index = indexOfnumberMatch(value, answers);
+    if (index === -1) {
+      index = indexOfFuzzyNumberMatch(value, answers);
+    }
+    if (index === -1) {
+      index = indexOfFuzzyWordMatch(value, answers);
+    }
+
     if (index === -1) return;
     answerQuestion({ id: currentQuestion.id, answer: [index] });
   }
 
   const handleCheckboxSend = () => {
-    let selectedValues = value.match(/\d/g)
+    let selectedValues = value.match(/\d/g);
     if (!selectedValues) {
       selectedValues = []
       currentQuestion.answers.map((element, index) => {
@@ -82,7 +106,25 @@ const Input = (props) => {
   }
 
   const onSpeakResult = (event) => {
+    console.log('speakresult', speakActive);
     setValue(event.transcript);
+  }
+
+  const speakFinish = () => {
+    console.log('button released', value);
+    setSpeakActive(false);
+
+    // There appears to be a bug sometimes where
+    // onResult gets called even after the button is
+    // released. That's why we use a timeout
+    if (autoSubmitSpeak) {
+      setTimeout(handleSend, 1000);
+    }
+  }
+
+  // This is the final event for when speaking is over
+  const onSpeakEnd = () => {
+    console.log('all done!')
   }
 
   const handleKeyPress = (event) => {
@@ -95,22 +137,29 @@ const Input = (props) => {
     }
   }
 
+  const placeholderText = () => {
+    if (speakActive) return 'Start Speaking'
+    if (autoSubmitSpeak) return '';
+    return 'Type your message';
+  }
+
   return (
     <InputWrapper>
       <AutoTextarea
         maxRows={3}
         onKeyPress={handleKeyPress}
         onChange={handleChange}
-        placeholder="Type your message"
+        placeholder={placeholderText()}
         value={value}
       />
       <Speak
         active={speakActive}
         onResult={onSpeakResult}
+        onEnd={onSpeakEnd}
       />
       <IconWrapper
         onMouseDown={() => setSpeakActive(true)}
-        onMouseUp={() => setSpeakActive(false)}
+        onMouseUp={speakFinish}
       >
         <Microphone />
       </IconWrapper>

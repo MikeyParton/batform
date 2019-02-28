@@ -47,7 +47,7 @@ const Question = (props) => {
         {question.answers.map((answer, index) => (
           <Option
             index={index}
-            active={selectedValues.includes(index)}
+            active={selectedValues.includes(index) || (question.userAnswer && question.userAnswer.includes(index))}
             onClick={() => toggleAnswer(index)}
           >
             {index + 1}. {answer.label}

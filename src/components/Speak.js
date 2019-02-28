@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Speak = (props) => {
-  const { active, onResult } = props;
+  const { active, onResult, onEnd } = props;
   const [recognition, setRecognition] = useState();
   const result = (event) => {
     const transcript = Array.from(event.results)
@@ -9,15 +9,15 @@ const Speak = (props) => {
 			.map(result => result.transcript)
 			.join("");
 
-    onResult && onResult({
-      transcript,
-      isFinal: event.results[0].isFinal
-    });
+    onResult && onResult({ transcript });
   }
 
   const end = (event) => {
     if (active) {
       recognition.start();
+    } else {
+      console.log('problems')
+      onEnd && onEnd();
     }
   }
 
