@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { MessageWrapper } from './Question';
+import styled from 'styled-components';
+import {
+  MessageWrapper,
+  OptionsWrapper,
+  Option
+} from './shared';
+
+const Placeholder = styled.div`
+  height: 59px;
+`;
 
 const Question = (props) => {
   const { question, answerQuestion } = props;
@@ -29,19 +38,26 @@ const Question = (props) => {
       <MessageWrapper>
         {question.question}
       </MessageWrapper>
-      <ul>
+      <OptionsWrapper>
         {question.answers.map((answer, index) => (
-          <li onClick={() => toggleAnswer(index)}>
-            {answer.label}
-            {selectedValues.includes(index) && (
-              <span>+</span>
-            )}
-          </li>
+          <Option
+            active={selectedValues.includes(index)}
+            onClick={() => toggleAnswer(index)}
+          >
+            {index + 1}. {answer.label}
+          </Option>
         ))}
-      </ul>
-      <button onClick={() => handleAnswer()}>
-        Submit
-      </button>
+        {selectedValues.length > 0 ? (
+          <Option
+            submit
+            onClick={handleAnswer}
+          >
+            Submit
+          </Option>
+        ) : (
+          <Placeholder />
+        )}
+      </OptionsWrapper>
     </div>
   )
 };

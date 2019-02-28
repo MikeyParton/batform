@@ -5,6 +5,7 @@
   "dependencies": {
     "easy-peasy": "^1.14.1",
     "normalizr": "^3.3.0",
+    "polished": "^3.0.0",
     "react": "^16.8.3",
     "react-device-detect": "^1.6.2",
     "react-dom": "^16.8.3",

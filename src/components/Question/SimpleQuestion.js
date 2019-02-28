@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageWrapper } from './Question';
+import { MessageWrapper } from './shared';
 
 const Question = (props) => {
   const { question, answerQuestion } = props;

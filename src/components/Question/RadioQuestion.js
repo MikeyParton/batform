@@ -1,5 +1,10 @@
 import React from 'react';
-import { MessageWrapper } from './Question';
+import styled from 'styled-components';
+import {
+  MessageWrapper,
+  OptionsWrapper,
+  Option
+} from './shared';
 
 const Question = (props) => {
   const { question, answerQuestion } = props;
@@ -14,16 +19,13 @@ const Question = (props) => {
       <MessageWrapper>
         {question.question}
       </MessageWrapper>
-      <ul>
+      <OptionsWrapper>
         {question.answers.map((answer, index) => (
-          <li onClick={() => handleAnswer(index)}>
-            {answer.label}
-            {question.userAnswer && question.userAnswer.includes(index) && (
-              <span>+</span>
-            )}
-          </li>
+          <Option onClick={() => handleAnswer(index)}>
+            {index + 1}. {answer.label}
+          </Option>
         ))}
-      </ul>
+      </OptionsWrapper>
     </div>
   )
 };
