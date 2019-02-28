@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useStore, useActions } from 'easy-peasy';
 import RadioQuestion from './RadioQuestion';
 import CheckboxQuestion from './CheckboxQuestion';
+import SimpleQuestion from './SimpleQuestion';
+import Message from './Message';
 
 const questionComponents = {
   radio: RadioQuestion,
-  checkbox: CheckboxQuestion
+  checkbox: CheckboxQuestion,
+  textarea: SimpleQuestion,
+  date: SimpleQuestion,
+  message: Message
 };
 
 const Question = (props) => {
