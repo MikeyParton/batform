@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useStore, useActions } from 'easy-peasy';
+import AutoTextarea from 'react-textarea-autosize';
+import { isMobile } from 'react-device-detect';
 import { Microphone, Send } from 'icons';
 import Speak from './Speak';
 import styled from 'styled-components';
@@ -8,17 +10,21 @@ const InputWrapper = styled.div`
   border-top: 1px solid grey;
   display: flex;
   flex-shrink: 0;
-  padding: 10px;
+  padding: 20px 10px;
 
   textarea {
     border: none;
     flex-grow: 1;
+    font-size: 18px;
     resize: none;
     outline: none;
   }
 `;
 
-const IconWrapper = styled.div``;
+const IconWrapper = styled.div`
+  align-self: flex-end;
+  margin-right: 10px;
+`;
 
 const Input = (props) => {
   const [speakActive, setSpeakActive] = useState(false);
@@ -78,9 +84,25 @@ const Input = (props) => {
     setValue(event.transcript);
   }
 
+  const handleKeyPress = (event) => {
+    // Desktop only form behaviour
+    // Enter = send
+    // Shift + Enter or Alt + Enter = new line
+    if (event.charCode === 13 && !event.altKey && !event.shiftKey && !isMobile) {
+      event.preventDefault();
+      handleSend();
+    }
+  }
+
   return (
     <InputWrapper>
-      <textarea onChange={handleChange} value={value} />
+      <AutoTextarea
+        maxRows={3}
+        onKeyPress={handleKeyPress}
+        onChange={handleChange}
+        placeholder="Type your message"
+        value={value}
+      />
       <Speak
         active={speakActive}
         onResult={onSpeakResult}

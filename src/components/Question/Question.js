@@ -5,6 +5,13 @@ import RadioQuestion from './RadioQuestion';
 import CheckboxQuestion from './CheckboxQuestion';
 import SimpleQuestion from './SimpleQuestion';
 import Message from './Message';
+import batman from 'images/batman.png';
+
+const Avatar = styled.img`
+  border-radius: 30px;
+  height: 60px;
+  margin-right: 10px;
+`;
 
 const Row = styled.div`
   display: flex;
@@ -61,6 +68,7 @@ const Question = (props) => {
   return (
     <>
       <Row ref={questionRef}>
+        <Avatar src={batman} />
         {typing ? (
           <MessageWrapper typing>
             ...
