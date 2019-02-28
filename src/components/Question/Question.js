@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useStore, useActions } from 'easy-peasy';
+import styled from 'styled-components';
 import RadioQuestion from './RadioQuestion';
 import CheckboxQuestion from './CheckboxQuestion';
 import SimpleQuestion from './SimpleQuestion';
 import Message from './Message';
+
+const QuestionWrapper = styled.div`white-space: pre-line;`
 
 const questionComponents = {
   radio: RadioQuestion,
@@ -46,12 +49,12 @@ const Question = (props) => {
   }
 
   return (
-    <div ref={questionRef}>
+    <QuestionWrapper ref={questionRef}>
       <Component
         answerQuestion={answerQuestion}
         question={question}
       />
-    </div>
+    </QuestionWrapper>
   )
 };
 

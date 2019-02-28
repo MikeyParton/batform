@@ -7,17 +7,17 @@ const wait = (time) => new Promise((resolve, reject) => {
 const questions = [
   {
     id: 1,
-    question: 'Firstly, what’s your name?',
-    type: 'textarea'
-  },
-  {
-    id: 2,
-    question: 'Thanks for that Phil. 🙂 We\'ll match you up with the right type of plumber.',
+    question: `Hi 👋 I’m the Oneflare automated assistant, here to help match you with the right plumber for your request. 🔧 `,
     type: 'message'
   },
   {
+    id: 2,
+    question: 'Let\'s get started. 😊 \nFirstly, what\'s your name?',
+    type: 'textarea'
+  },
+  {
     id: 3,
-    question: 'What do you need the plumber to do?',
+    question: `Thanks for that Phil. 🙂 Now I need to know some details about your plumbing problem.\nWhat do you need the plumber to do?`,
     type: 'radio',
     answers: [
       { label: 'Installation' },
@@ -74,8 +74,7 @@ const questions = [
   },
   {
     id: 10,
-    question: `Thanks Phil. We have all the details about your shower problem now. Plumbers
-    will contact you shortly to provide a quote and arrange a time to get the job done.`,
+    question: `Thanks Phil. We have all the details about your shower problem now. Plumbers will contact you shortly to provide a quote and arrange a time to get the job done.`,
     type: 'message'
   },
   {

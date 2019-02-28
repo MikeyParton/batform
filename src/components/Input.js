@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useStore, useActions } from 'easy-peasy';
 import Speak from './Speak';
 import styled from 'styled-components';
 
@@ -10,6 +11,24 @@ const InputWrapper = styled.div`
 const Input = (props) => {
   const [speakActive, setSpeakActive] = useState(false);
   const [value, setValue] = useState('');
+  const answerQuestion = useActions(state => state.questions.answerQuestion);
+  const currentQuestion = useStore(state => state.questions.currentQuestion);
+
+  const handleSimpleSend = () => {
+    answerQuestion({ id: currentQuestion.id, answer: value })
+  }
+  const handleSend = () => {
+    const handlers = {
+      // radio: handleRadioSend,
+      // checkbox: handleCheckboxSend,
+      // date: handleSimpleSend,
+      textarea: handleSimpleSend
+    };
+
+    const handler = handlers[currentQuestion.type];
+    handler();
+    setValue('');
+  }
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -32,6 +51,11 @@ const Input = (props) => {
         active={speakActive}
         onResult={onSpeakResult}
       />
+      <button
+        onClick={() => handleSend() }
+      >
+          Submit
+      </button>
     </InputWrapper>
   )
 }
