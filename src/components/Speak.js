@@ -7,7 +7,7 @@ const Speak = (props) => {
     const transcript = Array.from(event.results)
       .map(result => result[0])
 			.map(result => result.transcript)
-			.join("");
+			.join('');
 
     onResult && onResult({ transcript });
   }
@@ -16,7 +16,6 @@ const Speak = (props) => {
     if (active) {
       recognition.start();
     } else {
-      console.log('problems')
       onEnd && onEnd();
     }
   }

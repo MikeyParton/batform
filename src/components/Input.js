@@ -8,7 +8,6 @@ import {
   indexOfFuzzyNumberMatch,
   indexOfFuzzyWordMatch
 } from 'utils/fuzzyMatchers';
-import { usePrevious } from 'utils/hooks';
 import { Microphone, Send } from 'icons';
 import Speak from './Speak';
 
@@ -40,13 +39,6 @@ const Input = (props) => {
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const currentQuestion = useStore(state => state.questions.currentQuestion);
   const autoSubmitSpeak = currentQuestion && autoSubmitSpeakTypes.includes(currentQuestion.type);
-  const prevState = usePrevious({ speakActive });
-
-  useEffect(() => {
-    if(!speakActive && prevState.speakActive !== speakActive) {
-      console.log('should be doing something here');
-    }
-  }, [speakActive])
 
   const handleSimpleSend = () => {
     answerQuestion({ id: currentQuestion.id, answer: value })
