@@ -72,6 +72,7 @@ const Input = (props) => {
     };
 
     const handler = handlers[currentQuestion.type];
+    if (!handler) return;
     handler();
     setValue('');
   }
