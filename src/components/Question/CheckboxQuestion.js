@@ -33,6 +33,11 @@ const Question = (props) => {
     setSelectedValues(newSelectedValues)
   };
 
+  const hasSelected = selectedValues.length > 0;
+  const hasAnswered =  question.userAnswer;
+  const showSubmit = hasSelected && !hasAnswered;
+  const showPlaceholder = !hasSelected && !hasAnswered;
+
   return (
     <div>
       <MessageWrapper>
@@ -47,16 +52,15 @@ const Question = (props) => {
             {index + 1}. {answer.label}
           </Option>
         ))}
-        {selectedValues.length > 0 ? (
+        {showSubmit && (
           <Option
             submit
             onClick={handleAnswer}
           >
             Submit
           </Option>
-        ) : (
-          <Placeholder />
         )}
+        {showPlaceholder && <Placeholder />}
       </OptionsWrapper>
     </div>
   )

@@ -21,7 +21,10 @@ const Question = (props) => {
       </MessageWrapper>
       <OptionsWrapper>
         {question.answers.map((answer, index) => (
-          <Option onClick={() => handleAnswer(index)}>
+          <Option
+            active={question.userAnswer && question.userAnswer.includes(index)}
+            onClick={() => handleAnswer(index)}
+          >
             {index + 1}. {answer.label}
           </Option>
         ))}
