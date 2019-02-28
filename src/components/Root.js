@@ -9,7 +9,6 @@ const Root = () => {
     initialise()
   }, []);
 
-  const currentIndex = useStore(state => state.questions.ids);
   const askedIds = useStore(state => state.questions.askedIds);
 
   return (

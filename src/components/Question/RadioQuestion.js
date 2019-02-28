@@ -14,7 +14,7 @@ const Question = (props) => {
       <ul>
         {question.answers.map((answer, index) => (
           <li onClick={() => handleAnswer(index)}>
-            {answer.answer}
+            {answer.label}
             {question.userAnswer && question.userAnswer.includes(index) && (
               <span>+</span>
             )}

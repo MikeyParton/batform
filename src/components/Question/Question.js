@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useStore, useActions } from 'easy-peasy';
 import RadioQuestion from './RadioQuestion';
+import CheckboxQuestion from './CheckboxQuestion';
 
 const questionComponents = {
-  radio: RadioQuestion
+  radio: RadioQuestion,
+  checkbox: CheckboxQuestion
 };
 
 const Question = (props) => {
