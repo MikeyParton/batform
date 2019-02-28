@@ -17,11 +17,39 @@ const Input = (props) => {
   const handleSimpleSend = () => {
     answerQuestion({ id: currentQuestion.id, answer: value })
   }
+
+  const handleRadioSend = () => {
+    const index = currentQuestion.answers.findIndex((element, index) => {
+      return element.label.toLowerCase() === value.toLowerCase() || value === (index + 1).toString()
+    });
+    if (index === -1) return;
+    answerQuestion({ id: currentQuestion.id, answer: [index] });
+  }
+
+  const handleCheckboxSend = () => {
+    let selectedValues = value.match(/\d/g)
+    if (!selectedValues) {
+      selectedValues = []
+      currentQuestion.answers.map((element, index) => {
+        if ((value.toLowerCase()).includes(element.label.toLowerCase())) {
+          selectedValues = [...selectedValues, index]
+        }
+      })
+    } else {
+        selectedValues = selectedValues.map((val) => {
+          return parseInt(val) - 1 ;
+        });
+    }
+
+    if (selectedValues.length < 1) return;
+    answerQuestion({ id: currentQuestion.id, answer: selectedValues });
+  }
+
   const handleSend = () => {
     const handlers = {
-      // radio: handleRadioSend,
-      // checkbox: handleCheckboxSend,
-      // date: handleSimpleSend,
+      radio: handleRadioSend,
+      checkbox: handleCheckboxSend,
+      date: handleSimpleSend,
       textarea: handleSimpleSend
     };
 
