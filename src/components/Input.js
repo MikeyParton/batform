@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 import { useStore, useActions } from 'easy-peasy';
+import { Microphone, Send } from 'icons';
 import Speak from './Speak';
 import styled from 'styled-components';
 
 const InputWrapper = styled.div`
   border-top: 1px solid grey;
+  display: flex;
   flex-shrink: 0;
+  padding: 10px;
+
+  textarea {
+    border: none;
+    flex-grow: 1;
+    resize: none;
+    outline: none;
+  }
 `;
+
+const IconWrapper = styled.div``;
 
 const Input = (props) => {
   const [speakActive, setSpeakActive] = useState(false);
@@ -69,21 +81,19 @@ const Input = (props) => {
   return (
     <InputWrapper>
       <textarea onChange={handleChange} value={value} />
-      <button
-        onMouseDown={() => setSpeakActive(true)}
-        onMouseUp={() => setSpeakActive(false)}
-      >
-          Mic
-      </button>
       <Speak
         active={speakActive}
         onResult={onSpeakResult}
       />
-      <button
-        onClick={() => handleSend() }
+      <IconWrapper
+        onMouseDown={() => setSpeakActive(true)}
+        onMouseUp={() => setSpeakActive(false)}
       >
-          Submit
-      </button>
+        <Microphone />
+      </IconWrapper>
+      <IconWrapper onClick={() => handleSend() }>
+        <Send />
+      </IconWrapper>
     </InputWrapper>
   )
 }
