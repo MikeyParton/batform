@@ -9,6 +9,7 @@ const question = new schema.Entity('questions');
 const questionSchema = [ question ];
 
 const model = {
+  voiceMode: true,
   questions: {
     byId: {},
     ids: [],

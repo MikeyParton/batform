@@ -33,8 +33,11 @@ const questionComponents = {
   message: Message
 };
 
+const synthesis = window.speechSynthesis
+
 const Question = (props) => {
   const { id } = props;
+  const voiceMode = useStore(state => state.voiceMode)
   const question = useStore(state => state.questions.getById(id));
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const [typing, setTyping] = useState(true);
@@ -52,6 +55,28 @@ const Question = (props) => {
     if (!questionRef.current) return;
     questionRef.current.scrollIntoView({ behavior: 'smooth' });
   });
+
+  // Read questions when the messages have rendered
+  useEffect(() => {
+    // If we progress to a new question, stop speaking
+    if (synthesis.speaking || !voiceMode) {
+      synthesis.cancel()
+    }
+    if (typing || !voiceMode) {
+      return
+    }
+
+    // Read the question
+    window.speechSynthesis.speak(
+      new SpeechSynthesisUtterance(question.question)
+    )
+    // ... followed by the available answers
+    question.answers.forEach(({label}, index) =>
+      window.speechSynthesis.speak(
+        new SpeechSynthesisUtterance(`${index + 1}. ${label}`)
+      )
+    )
+  })
 
   const Component = questionComponents[question.type];
   if (!Component) return null;
