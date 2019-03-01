@@ -8,7 +8,7 @@ import {
   indexOfFuzzyNumberMatch,
   indexOfFuzzyWordMatch
 } from 'utils/fuzzyMatchers';
-import { Microphone, Send } from 'icons';
+import { Microphone, Send, SpeakerOn, SpeakerOff } from 'icons';
 import Speak from './Speak';
 
 const autoSubmitSpeakTypes = ['radio', 'checkbox'];
@@ -39,6 +39,8 @@ const Input = (props) => {
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const currentQuestion = useStore(state => state.questions.currentQuestion);
   const autoSubmitSpeak = currentQuestion && autoSubmitSpeakTypes.includes(currentQuestion.type);
+  const voiceMode= useStore(state => state.voiceMode);
+  const toggleVoiceMode = useActions(state => state.toggleVoiceMode);
 
   const handleSimpleSend = () => {
     answerQuestion({ id: currentQuestion.id, answer: value })
@@ -95,6 +97,10 @@ const Input = (props) => {
 
   const handleChange = (event) => {
     setValue(event.target.value);
+  }
+
+  const handleSpeaker = () => {
+    toggleVoiceMode()
   }
 
   const onSpeakResult = (event) => {
@@ -157,6 +163,13 @@ const Input = (props) => {
       </IconWrapper>
       <IconWrapper onClick={() => handleSend() }>
         <Send />
+      </IconWrapper>
+      <IconWrapper onClick={() => handleSpeaker() }>
+        {
+          voiceMode
+            ? <SpeakerOn/>
+            : <SpeakerOff/>
+        }
       </IconWrapper>
     </InputWrapper>
   )

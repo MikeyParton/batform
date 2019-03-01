@@ -39,7 +39,6 @@ const Question = (props) => {
   const { id, voiceMode } = props;
   const question = useStore(state => state.questions.getById(id));
   const answerQuestion = useActions(state => state.questions.answerQuestion);
-  const toggleVoiceMode = useActions(state => state.toggleVoiceMode)
   const [typing, setTyping] = useState(true);
 
   // Show question after typing for a few seconds
@@ -84,7 +83,7 @@ const Question = (props) => {
   return (
     <>
       <Row ref={questionRef}>
-        <Avatar src={batman} onClick={toggleVoiceMode}/>
+        <Avatar src={batman}/>
         {typing ? (
           <MessageWrapper typing>
             ...
