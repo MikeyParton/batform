@@ -101,7 +101,11 @@ const Question = (props) => {
   useEffect(() => {
     if (typeof question.userAnswer !== 'undefined') {
       if (voiceMode) {
-        const answerUtterance = new SpeechSynthesisUtterance(`okay, ${friendlyAnswer}`);
+        const message = question.type === 'message'
+          ? ' '
+          : `okay, ${friendlyAnswer}`
+
+          const answerUtterance = new SpeechSynthesisUtterance(message);
         answerUtterance.onend = nextQuestion;
         window.speechSynthesis.speak(answerUtterance);
       } else {
