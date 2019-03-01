@@ -61,11 +61,19 @@ const Question = (props) => {
     questionRef.current.scrollIntoView({ behavior: 'smooth' });
   });
 
+  // If voiceMode is disabled, stop speaking
   useEffect(() => {
     if (!voiceMode) {
       synthesis.cancel()
     }
   }, [voiceMode])
+
+  // If we progress to a new question, stop speaking
+  useEffect(() => {
+    if (synthesis.speaking) {
+      synthesis.cancel()
+    }
+  })
 
   // Read questions when the messages have rendered
   // TODO: This is kind of gross and could use a refactor
@@ -73,10 +81,6 @@ const Question = (props) => {
   // the render method
 
   useEffect(() => {
-    // If we progress to a new question, stop speaking
-    if (synthesis.speaking) {
-      synthesis.cancel()
-    }
     if (typing || !voiceMode || question.userAnswer) {
       return
     }
@@ -101,17 +105,16 @@ const Question = (props) => {
   useEffect(() => {
     if (typeof question.userAnswer !== 'undefined') {
       if (voiceMode) {
-        const message = question.type === 'message'
-          ? ' '
-          : `okay, ${friendlyAnswer}`
-
-          const answerUtterance = new SpeechSynthesisUtterance(message);
+        const answerUtterance = new SpeechSynthesisUtterance(
+          question.type === 'message'
+            ? ' '
+            : `okay, ${friendlyAnswer}`
+        );
         answerUtterance.onend = nextQuestion;
         window.speechSynthesis.speak(answerUtterance);
       } else {
         nextQuestion();
       }
-      return;
     }
   }, [question.userAnswer])
 
