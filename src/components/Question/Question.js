@@ -42,6 +42,7 @@ const Question = (props) => {
   const question = useStore(state => state.questions.getById(id));
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const [typing, setTyping] = useState(true);
+  const friendlyQuestion = question.question.replace('$name', sharedContext.name)
 
   // Show question after typing for a few seconds
   useEffect(() => {
@@ -69,7 +70,7 @@ const Question = (props) => {
 
     // Read the question
     window.speechSynthesis.speak(
-      new SpeechSynthesisUtterance(question.question)
+      new SpeechSynthesisUtterance(friendlyQuestion)
     )
     // ... followed by the available answers
     question.answers && question.answers.forEach(({label}, index) =>
@@ -94,7 +95,7 @@ const Question = (props) => {
           <Component
             answerQuestion={answerQuestion}
             question={question}
-            friendlyQuestion={question.question.replace('$name', sharedContext.name)}
+            friendlyQuestion={friendlyQuestion}
           />
         )}
       </Row>
