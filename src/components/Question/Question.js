@@ -100,7 +100,7 @@ const Question = (props) => {
         new SpeechSynthesisUtterance(`${index + 1}. ${label}`)
       )
     )
-  })
+  }, [question, typing])
 
   useEffect(() => {
     if (typeof question.userAnswer !== 'undefined') {
