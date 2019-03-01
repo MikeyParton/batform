@@ -11,7 +11,7 @@ const Placeholder = styled.div`
 `;
 
 const Question = (props) => {
-  const { question, answerQuestion } = props;
+  const { question, answerQuestion, friendlyQuestion } = props;
   const [selectedValues, setSelectedValues] = useState([]);
   const handleAnswer = () => {
     // Return if already answered
@@ -41,7 +41,7 @@ const Question = (props) => {
   return (
     <div>
       <MessageWrapper>
-        {question.question}
+        {friendlyQuestion}
       </MessageWrapper>
       <OptionsWrapper>
         {question.answers.map((answer, index) => (

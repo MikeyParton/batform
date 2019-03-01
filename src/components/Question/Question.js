@@ -30,13 +30,15 @@ const questionComponents = {
   checkbox: CheckboxQuestion,
   textarea: SimpleQuestion,
   date: SimpleQuestion,
-  message: Message
+  message: Message,
+  name: SimpleQuestion
 };
 
 const synthesis = window.speechSynthesis
 
 const Question = (props) => {
   const { id, voiceMode } = props;
+  const sharedContext = useStore(state => state.sharedContext);
   const question = useStore(state => state.questions.getById(id));
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const [typing, setTyping] = useState(true);
@@ -70,7 +72,7 @@ const Question = (props) => {
       new SpeechSynthesisUtterance(question.question)
     )
     // ... followed by the available answers
-    question.answers.forEach(({label}, index) =>
+    question.answers && question.answers.forEach(({label}, index) =>
       window.speechSynthesis.speak(
         new SpeechSynthesisUtterance(`${index + 1}. ${label}`)
       )
@@ -92,6 +94,7 @@ const Question = (props) => {
           <Component
             answerQuestion={answerQuestion}
             question={question}
+            friendlyQuestion={question.question.replace('$name', sharedContext.name)}
           />
         )}
       </Row>
@@ -99,6 +102,14 @@ const Question = (props) => {
         <Row user>
           <MessageWrapper user>
             {question.friendlyAnswer}
+          </MessageWrapper>
+        </Row>
+      )}
+      {question.error && (
+        <Row>
+          <Avatar src={batman} />
+          <MessageWrapper error>
+            Sorry I didn't catch that. Can you try again please?
           </MessageWrapper>
         </Row>
       )}

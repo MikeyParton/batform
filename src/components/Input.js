@@ -37,33 +37,63 @@ const Input = (props) => {
   const [speakActive, setSpeakActive] = useState(false);
   const [value, setValue] = useState('');
   const answerQuestion = useActions(state => state.questions.answerQuestion);
+  const setQuestionError = useActions(state => state.questions.setQuestionError);
+  const setSharedContext = useActions(state => state.setSharedContext);
   const currentQuestion = useStore(state => state.questions.currentQuestion);
   const autoSubmitSpeak = currentQuestion && autoSubmitSpeakTypes.includes(currentQuestion.type);
   const voiceMode= useStore(state => state.voiceMode);
   const toggleVoiceMode = useActions(state => state.toggleVoiceMode);
 
+  useEffect(() => {
+    if (speakActive) {
+      setValue('');
+    }
+  }, [speakActive])
+
   const handleSimpleSend = () => {
     answerQuestion({ id: currentQuestion.id, answer: value })
   }
 
+  const handleNameSend = () => {
+    setSharedContext({
+      name: value
+    })
+    handleSimpleSend();
+  }
+
   const handleRadioSend = () => {
     const answers = currentQuestion.answers.map(answer => answer.label);
-    let index;
+    let index = indexOfFuzzyNumberMatch(value, answers);
 
-    index = indexOfnumberMatch(value, answers);
-    if (index === -1) {
-      index = indexOfFuzzyNumberMatch(value, answers);
-    }
     if (index === -1) {
       index = indexOfFuzzyWordMatch(value, answers);
     }
 
-    if (index === -1) return;
+    // Set error message
+    if (index === -1) {
+      setQuestionError({ id: currentQuestion.id });
+      return;
+    }
     answerQuestion({ id: currentQuestion.id, answer: [index] });
   }
 
   const handleCheckboxSend = () => {
-    let selectedValues = value.match(/\d/g);
+    let selectedValues
+
+    const options = currentQuestion.answers.map(answer => answer.label);
+    // const numberInputs = value.match(/\d/g);
+    const inputs = value
+      .split(' ')
+      .filter((input) => input !== 'and');
+
+    const indicies = inputs
+      .map((input) => indexOfFuzzyNumberMatch(input, options))
+      .filter((index) => index !== -1);
+
+    if (indicies.length === inputs.length) {
+      selectedValues = indicies;
+    }
+
     if (!selectedValues) {
       selectedValues = []
       currentQuestion.answers.map((element, index) => {
@@ -71,13 +101,12 @@ const Input = (props) => {
           selectedValues = [...selectedValues, index]
         }
       })
-    } else {
-        selectedValues = selectedValues.map((val) => {
-          return parseInt(val) - 1 ;
-        });
     }
 
-    if (selectedValues.length < 1) return;
+    if (selectedValues.length < 1) {
+      setQuestionError({ id: currentQuestion.id });
+      return;
+    }
     answerQuestion({ id: currentQuestion.id, answer: selectedValues });
   }
 
@@ -86,7 +115,8 @@ const Input = (props) => {
       radio: handleRadioSend,
       checkbox: handleCheckboxSend,
       date: handleSimpleSend,
-      textarea: handleSimpleSend
+      textarea: handleSimpleSend,
+      name: handleNameSend
     };
 
     const handler = handlers[currentQuestion.type];
@@ -108,16 +138,21 @@ const Input = (props) => {
     setValue(event.transcript);
   }
 
+  const speakStart = () => {
+    setSpeakActive(true)
+  }
+
   const speakFinish = () => {
     console.log('button released', value);
     setSpeakActive(false);
 
+    // Autosubmit is no good until we can fix this mismatch error
     // There appears to be a bug sometimes where
     // onResult gets called even after the button is
     // released. That's why we use a timeout
-    if (autoSubmitSpeak) {
-      setTimeout(handleSend, 1000);
-    }
+    // if (autoSubmitSpeak) {
+    //   setTimeout(handleSend, 1000);
+    // }
   }
 
   // This is the final event for when speaking is over
@@ -156,8 +191,9 @@ const Input = (props) => {
         onEnd={onSpeakEnd}
       />
       <IconWrapper
-        onMouseDown={() => setSpeakActive(true)}
+        onMouseDown={speakStart}
         onMouseUp={speakFinish}
+        onMouseLeave={speakFinish}
       >
         <Microphone />
       </IconWrapper>

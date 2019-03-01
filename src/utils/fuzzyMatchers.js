@@ -1,6 +1,20 @@
 import FuzzySet from 'fuzzyset';
 import wordsToNumbers from 'words-to-numbers';
 
+const numberValues = {
+  1: 'one',
+  2: 'two',
+  to: 'two',
+  3: 'three',
+  4: 'four',
+  5: 'five',
+  6: 'six',
+  7: 'seven',
+  8: 'eight',
+  9: 'nine',
+  10: 'ten'
+};
+
 // Find the index of the closest matching word
 export const indexOfFuzzyWordMatch = (value, options) => {
   const fs = FuzzySet(options);
@@ -18,14 +32,27 @@ export const indexOfFuzzyWordMatch = (value, options) => {
 
 // Find the index of an option number e.g. 1
 export const indexOfnumberMatch = (value, options) => {
-  return options.findIndex((option, index) => {
-    if (value === (index + 1).toString()) return true;
-  });
+  return
 };
 
 // Find the index of an option number word e.g. 'one' or 'won'
 export const indexOfFuzzyNumberMatch = (value, options) => {
-  return options.findIndex((option, index) => {
-    if (wordsToNumbers(value, { fuzzy: true }) === index + 1) return true;
+  let index;
+
+  index = options.findIndex((option, index) => {
+    if (value === (index + 1).toString()) return true;
   });
+
+  if (index === -1) {
+    // fuzzy matcher doesn't recognise to as two :(
+    const numberValue = numberValues[value]
+    value = numberValue || value;
+
+    index = options.findIndex((option, index) => {
+      const result = wordsToNumbers(value, { fuzzy: true });
+      return (wordsToNumbers(value, { fuzzy: true }) === index + 1);
+    });
+  }
+
+  return index
 };

@@ -7,7 +7,7 @@ import {
 } from './shared';
 
 const Question = (props) => {
-  const { question, answerQuestion } = props;
+  const { question, answerQuestion, friendlyQuestion } = props;
   const handleAnswer = (index) => {
     // Return if already answered
     if (question.userAnswer) return;
@@ -17,7 +17,7 @@ const Question = (props) => {
   return (
     <div>
       <MessageWrapper>
-        {question.question}
+        {friendlyQuestion}
       </MessageWrapper>
       <OptionsWrapper>
         {question.answers.map((answer, index) => (

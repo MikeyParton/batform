@@ -3,6 +3,7 @@ import { darken, lighten } from 'polished';
 
 const botMessageColor = '#D8D8D8';
 const userMessageColor = '#263133';
+const errorMessageColor = '#f44b42';
 
 export const fadeIn = (delay) => css`
   animation: fadeIn 0.5s ${delay && `${delay}s `}linear;
@@ -24,6 +25,11 @@ export const MessageWrapper = styled.div`
 
   ${props => props.user && `
     background-color: ${userMessageColor};
+    color: white;
+  `}
+
+  ${props => props.error && `
+    background-color: ${errorMessageColor};
     color: white;
   `}
 
