@@ -38,6 +38,7 @@ const Input = (props) => {
   const [value, setValue] = useState('');
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const setQuestionError = useActions(state => state.questions.setQuestionError);
+  const setSharedContext = useActions(state => state.setSharedContext);
   const currentQuestion = useStore(state => state.questions.currentQuestion);
   const autoSubmitSpeak = currentQuestion && autoSubmitSpeakTypes.includes(currentQuestion.type);
 
@@ -49,6 +50,13 @@ const Input = (props) => {
 
   const handleSimpleSend = () => {
     answerQuestion({ id: currentQuestion.id, answer: value })
+  }
+
+  const handleNameSend = () => {
+    setSharedContext({
+      name: value
+    })
+    handleSimpleSend();
   }
 
   const handleRadioSend = () => {
@@ -105,7 +113,8 @@ const Input = (props) => {
       radio: handleRadioSend,
       checkbox: handleCheckboxSend,
       date: handleSimpleSend,
-      textarea: handleSimpleSend
+      textarea: handleSimpleSend,
+      name: handleNameSend
     };
 
     const handler = handlers[currentQuestion.type];

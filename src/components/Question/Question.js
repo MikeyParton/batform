@@ -73,7 +73,7 @@ const Question = (props) => {
       new SpeechSynthesisUtterance(question.question)
     )
     // ... followed by the available answers
-    question.answers.forEach(({label}, index) =>
+    question.answers && question.answers.forEach(({label}, index) =>
       window.speechSynthesis.speak(
         new SpeechSynthesisUtterance(`${index + 1}. ${label}`)
       )

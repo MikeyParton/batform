@@ -13,6 +13,12 @@ const model = {
   sharedContext: {
     name: 'mate'
   },
+  setSharedContext: (state, payload) => {
+    state.sharedContext = {
+      ...state.sharedContext,
+      ...payload
+    };
+  },
   questions: {
     byId: {},
     ids: [],

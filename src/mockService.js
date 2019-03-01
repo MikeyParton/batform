@@ -5,16 +5,16 @@ const wait = (time) => new Promise((resolve, reject) => {
 });
 
 const questions = [
-  // {
-  //   id: 1,
-  //   question: `Hi 👋 I’m the Oneflare automated assistant, here to help match you with the right plumber for your request. 🔧 `,
-  //   type: 'message'
-  // },
-  // {
-  //   id: 2,
-  //   question: 'Let\'s get started. 😊 \nFirstly, what\'s your name?',
-  //   type: 'name'
-  // },
+  {
+    id: 1,
+    question: `Hi 👋 I’m the Oneflare automated assistant, here to help match you with the right plumber for your request. 🔧 `,
+    type: 'message'
+  },
+  {
+    id: 2,
+    question: 'Let\'s get started. 😊 \nFirstly, what\'s your name?',
+    type: 'name'
+  },
   {
     id: 3,
     question: `Thanks for that $name. 🙂 Now I need to know some details about your plumbing problem.\nWhat do you need the plumber to do?`,
