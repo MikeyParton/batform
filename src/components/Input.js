@@ -41,18 +41,20 @@ const Input = (props) => {
   const currentQuestion = useStore(state => state.questions.currentQuestion);
   const autoSubmitSpeak = currentQuestion && autoSubmitSpeakTypes.includes(currentQuestion.type);
 
+  useEffect(() => {
+    if (speakActive) {
+      setValue('');
+    }
+  }, [speakActive])
+
   const handleSimpleSend = () => {
     answerQuestion({ id: currentQuestion.id, answer: value })
   }
 
   const handleRadioSend = () => {
     const answers = currentQuestion.answers.map(answer => answer.label);
-    let index;
+    let index = indexOfFuzzyNumberMatch(value, answers);
 
-    index = indexOfnumberMatch(value, answers);
-    if (index === -1) {
-      index = indexOfFuzzyNumberMatch(value, answers);
-    }
     if (index === -1) {
       index = indexOfFuzzyWordMatch(value, answers);
     }
@@ -66,7 +68,22 @@ const Input = (props) => {
   }
 
   const handleCheckboxSend = () => {
-    let selectedValues = value.match(/\d/g);
+    let selectedValues
+
+    const options = currentQuestion.answers.map(answer => answer.label);
+    // const numberInputs = value.match(/\d/g);
+    const inputs = value
+      .split(' ')
+      .filter((input) => input !== 'and');
+
+    const indicies = inputs
+      .map((input) => indexOfFuzzyNumberMatch(input, options))
+      .filter((index) => index !== -1);
+
+    if (indicies.length === inputs.length) {
+      selectedValues = indicies;
+    }
+
     if (!selectedValues) {
       selectedValues = []
       currentQuestion.answers.map((element, index) => {
@@ -74,10 +91,6 @@ const Input = (props) => {
           selectedValues = [...selectedValues, index]
         }
       })
-    } else {
-        selectedValues = selectedValues.map((val) => {
-          return parseInt(val) - 1 ;
-        });
     }
 
     if (selectedValues.length < 1) {
@@ -110,16 +123,21 @@ const Input = (props) => {
     setValue(event.transcript);
   }
 
+  const speakStart = () => {
+    setSpeakActive(true)
+  }
+
   const speakFinish = () => {
     console.log('button released', value);
     setSpeakActive(false);
 
+    // Autosubmit is no good until we can fix this mismatch error
     // There appears to be a bug sometimes where
     // onResult gets called even after the button is
     // released. That's why we use a timeout
-    if (autoSubmitSpeak) {
-      setTimeout(handleSend, 1000);
-    }
+    // if (autoSubmitSpeak) {
+    //   setTimeout(handleSend, 1000);
+    // }
   }
 
   // This is the final event for when speaking is over
@@ -158,8 +176,9 @@ const Input = (props) => {
         onEnd={onSpeakEnd}
       />
       <IconWrapper
-        onMouseDown={() => setSpeakActive(true)}
+        onMouseDown={speakStart}
         onMouseUp={speakFinish}
+        onMouseLeave={speakFinish}
       >
         <Microphone />
       </IconWrapper>
