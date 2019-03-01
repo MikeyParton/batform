@@ -13,11 +13,11 @@ const questions = [
   // {
   //   id: 2,
   //   question: 'Let\'s get started. 😊 \nFirstly, what\'s your name?',
-  //   type: 'textarea'
+  //   type: 'name'
   // },
   {
     id: 3,
-    question: `Thanks for that Phil. 🙂 Now I need to know some details about your plumbing problem.\nWhat do you need the plumber to do?`,
+    question: `Thanks for that $name. 🙂 Now I need to know some details about your plumbing problem.\nWhat do you need the plumber to do?`,
     type: 'radio',
     answers: [
       { label: 'Installation' },
@@ -74,14 +74,18 @@ const questions = [
   },
   {
     id: 10,
-    question: `Thanks Phil. We have all the details about your shower problem now. Plumbers will contact you shortly to provide a quote and arrange a time to get the job done.`,
+    question: `Thanks $name. We have all the details about your shower problem now. Plumbers will contact you shortly to provide a quote and arrange a time to get the job done.`,
     type: 'message'
   },
   {
     id: 11,
     question: 'Please contact us if you have any questions',
-    type: 'message'
-  }
+    type: 'radio',
+    answers: [
+      { label: 'Call us 📞' },
+      { label: 'Chat to a support member 👩‍💻' }
+    ]
+  },
 ];
 
 const mockService = {

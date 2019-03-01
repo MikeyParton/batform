@@ -37,6 +37,7 @@ const Input = (props) => {
   const [speakActive, setSpeakActive] = useState(false);
   const [value, setValue] = useState('');
   const answerQuestion = useActions(state => state.questions.answerQuestion);
+  const setQuestionError = useActions(state => state.questions.setQuestionError);
   const currentQuestion = useStore(state => state.questions.currentQuestion);
   const autoSubmitSpeak = currentQuestion && autoSubmitSpeakTypes.includes(currentQuestion.type);
 
@@ -56,7 +57,11 @@ const Input = (props) => {
       index = indexOfFuzzyWordMatch(value, answers);
     }
 
-    if (index === -1) return;
+    // Set error message
+    if (index === -1) {
+      setQuestionError({ id: currentQuestion.id });
+      return;
+    }
     answerQuestion({ id: currentQuestion.id, answer: [index] });
   }
 
@@ -75,7 +80,10 @@ const Input = (props) => {
         });
     }
 
-    if (selectedValues.length < 1) return;
+    if (selectedValues.length < 1) {
+      setQuestionError({ id: currentQuestion.id });
+      return;
+    }
     answerQuestion({ id: currentQuestion.id, answer: selectedValues });
   }
 

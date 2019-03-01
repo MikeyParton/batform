@@ -10,6 +10,9 @@ const questionSchema = [ question ];
 
 const model = {
   voiceMode: true,
+  sharedContext: {
+    name: 'mate'
+  },
   questions: {
     byId: {},
     ids: [],
@@ -50,11 +53,23 @@ const model = {
         [payload.id]: {
           ...question,
           userAnswer: payload.answer,
-          friendlyAnswer: friendlyAnswer
+          friendlyAnswer: friendlyAnswer,
+          error: false
         }
       };
 
       state.currentIndex++;
+    },
+    setQuestionError: (state, payload) => {
+      const question = state.byId[payload.id];
+
+      state.byId = {
+        ...state.byId,
+        [payload.id]: {
+          ...question,
+          error: true
+        }
+      };
     },
     next: (state, payload) => {
       state.currentIndex++;
