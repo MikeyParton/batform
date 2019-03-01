@@ -30,6 +30,7 @@ const Root = () => {
   }, []);
 
   const askedIds = useStore(state => state.questions.askedIds);
+  const voiceMode = useStore(state => state.voiceMode)
 
   return (
     <Page>
@@ -38,7 +39,7 @@ const Root = () => {
       </Header>
       <MessageWindow>
         {askedIds.map(id => (
-          <Question id={id} />
+          <Question id={id} voiceMode={voiceMode}/>
         ))}
       </MessageWindow>
       <Input />

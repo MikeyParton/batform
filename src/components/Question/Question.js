@@ -36,10 +36,10 @@ const questionComponents = {
 const synthesis = window.speechSynthesis
 
 const Question = (props) => {
-  const { id } = props;
-  const voiceMode = useStore(state => state.voiceMode)
+  const { id, voiceMode } = props;
   const question = useStore(state => state.questions.getById(id));
   const answerQuestion = useActions(state => state.questions.answerQuestion);
+  const toggleVoiceMode = useActions(state => state.toggleVoiceMode)
   const [typing, setTyping] = useState(true);
 
   // Show question after typing for a few seconds

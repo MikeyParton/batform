@@ -12,7 +12,6 @@ const model = {
   voiceMode: false,
   toggleVoiceMode: (state, payload) => {
     state.voiceMode = !state.voiceMode
-    console.log('voiceMode now: ', state.voiceMode)
   },
   questions: {
     byId: {},
