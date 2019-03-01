@@ -66,7 +66,8 @@ const model = {
           error: false
         }
       };
-
+    },
+    nextQuestion:(state, payload) => {
       state.currentIndex++;
     },
     setQuestionError: (state, payload) => {

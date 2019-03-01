@@ -41,6 +41,7 @@ const Question = (props) => {
   const sharedContext = useStore(state => state.sharedContext);
   const question = useStore(state => state.questions.getById(id));
   const answerQuestion = useActions(state => state.questions.answerQuestion);
+  const nextQuestion = useActions(state => state.questions.nextQuestion);
   const [typing, setTyping] = useState(true);
   const friendlyQuestion = question.question.replace('$name', sharedContext.name)
   const friendlyAnswer = question.friendlyAnswer;
@@ -60,6 +61,12 @@ const Question = (props) => {
     questionRef.current.scrollIntoView({ behavior: 'smooth' });
   });
 
+  useEffect(() => {
+    if (!voiceMode) {
+      synthesis.cancel()
+    }
+  }, [voiceMode])
+
   // Read questions when the messages have rendered
   // TODO: This is kind of gross and could use a refactor
   // It should always reflect the order of components in
@@ -67,10 +74,10 @@ const Question = (props) => {
 
   useEffect(() => {
     // If we progress to a new question, stop speaking
-    if (synthesis.speaking || !voiceMode) {
+    if (synthesis.speaking) {
       synthesis.cancel()
     }
-    if (typing || !voiceMode) {
+    if (typing || !voiceMode || question.userAnswer) {
       return
     }
 
@@ -90,6 +97,19 @@ const Question = (props) => {
       )
     )
   })
+
+  useEffect(() => {
+    if (typeof question.userAnswer !== 'undefined') {
+      if (voiceMode) {
+        const answerUtterance = new SpeechSynthesisUtterance(`okay, ${friendlyAnswer}`);
+        answerUtterance.onend = nextQuestion;
+        window.speechSynthesis.speak(answerUtterance);
+      } else {
+        nextQuestion();
+      }
+      return;
+    }
+  }, [question.userAnswer])
 
   const Component = questionComponents[question.type];
   if (!Component) return null;
