@@ -9,7 +9,11 @@ const question = new schema.Entity('questions');
 const questionSchema = [ question ];
 
 const model = {
-  voiceMode: true,
+  voiceMode: false,
+  toggleVoiceMode: (state, payload) => {
+    state.voiceMode = !state.voiceMode
+    console.log('voiceMode now: ', state.voiceMode)
+  },
   questions: {
     byId: {},
     ids: [],
@@ -70,7 +74,7 @@ const model = {
       const response = await mockService.fetchQuestions();
       const { entities: { questions } } = normalize(response, questionSchema);
       actions.fetched(questions);
-    })
+    }),
   },
   initialise: thunk(async (actions, payload, { dispatch }) => {
     await dispatch.questions.fetch();

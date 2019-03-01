@@ -84,7 +84,7 @@ const Question = (props) => {
   return (
     <>
       <Row ref={questionRef}>
-        <Avatar src={batman} />
+        <Avatar src={batman} onClick={toggleVoiceMode}/>
         {typing ? (
           <MessageWrapper typing>
             ...
