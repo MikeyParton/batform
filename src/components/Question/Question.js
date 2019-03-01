@@ -43,6 +43,8 @@ const Question = (props) => {
   const answerQuestion = useActions(state => state.questions.answerQuestion);
   const [typing, setTyping] = useState(true);
   const friendlyQuestion = question.question.replace('$name', sharedContext.name)
+  const friendlyAnswer = question.friendlyAnswer;
+  const errorMessage = "Sorry I didn't catch that. Can you try again please?";
 
   // Show question after typing for a few seconds
   useEffect(() => {
@@ -59,6 +61,10 @@ const Question = (props) => {
   });
 
   // Read questions when the messages have rendered
+  // TODO: This is kind of gross and could use a refactor
+  // It should always reflect the order of components in
+  // the render method
+
   useEffect(() => {
     // If we progress to a new question, stop speaking
     if (synthesis.speaking || !voiceMode) {
@@ -67,6 +73,11 @@ const Question = (props) => {
     if (typing || !voiceMode) {
       return
     }
+
+    // If we get an error, read it out here
+    question.error && window.speechSynthesis.speak(
+      new SpeechSynthesisUtterance(errorMessage)
+    )
 
     // Read the question
     window.speechSynthesis.speak(
@@ -102,7 +113,7 @@ const Question = (props) => {
       {question.userAnswer && (
         <Row user>
           <MessageWrapper user>
-            {question.friendlyAnswer}
+            {friendlyAnswer}
           </MessageWrapper>
         </Row>
       )}
@@ -110,7 +121,7 @@ const Question = (props) => {
         <Row>
           <Avatar src={batman} />
           <MessageWrapper error>
-            Sorry I didn't catch that. Can you try again please?
+            {errorMessage}
           </MessageWrapper>
         </Row>
       )}
